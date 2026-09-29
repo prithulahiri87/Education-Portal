@@ -45,6 +45,13 @@ uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 
 If `OPENAI_API_KEY` is missing, chat routes return HTTP 503 with an explicit message. They do not invent an answer.
 
-## Harbor CRM
+## Deploy
 
-`crm/` is a separate sales desk for Lead, Account, Contact, Opportunity, Quote, and QuoteLineItem. Setup and the architecture diagram are in [crm/README.md](crm/README.md).
+The container serves the HTML UI and the API. Set `OPENAI_API_KEY` in the host environment. Do not bake the key into the image.
+
+```bash
+docker build -t education-portal .
+docker run --rm -p 8000:8000 -e OPENAI_API_KEY -e PORT=8000 education-portal
+```
+
+The process listens on `0.0.0.0` and `$PORT` (default 8000), and loads the sample knowledge file on startup.

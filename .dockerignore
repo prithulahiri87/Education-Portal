@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+**/.env
+backend/chroma_data
+ui-react/node_modules
+ui-react/dist
+**/__pycache__
+**/.pytest_cache
+.DS_Store
