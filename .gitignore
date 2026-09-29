@@ -5,4 +5,8 @@ __pycache__/
 backend/chroma_data/
 ui-react/node_modules/
 ui-react/dist/
+crm/backend/.venv/
+crm/frontend/node_modules/
+crm/frontend/dist/
+crm/data/
 .DS_Store

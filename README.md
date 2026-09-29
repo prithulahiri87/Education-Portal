@@ -44,3 +44,7 @@ uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 - `POST /v1/chat/completions` — OpenAI-style `messages` body. Retrieval runs on the latest user message. The response follows the chat-completion shape and adds a `sources` array.
 
 If `OPENAI_API_KEY` is missing, chat routes return HTTP 503 with an explicit message. They do not invent an answer.
+
+## Harbor CRM
+
+`crm/` is a separate sales desk for Lead, Account, Contact, Opportunity, Quote, and QuoteLineItem. Setup and the architecture diagram are in [crm/README.md](crm/README.md).
