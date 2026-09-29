@@ -1,0 +1,8 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+backend/chroma_data/
+ui-react/node_modules/
+ui-react/dist/
+.DS_Store
