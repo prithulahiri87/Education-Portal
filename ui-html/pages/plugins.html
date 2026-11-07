@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Plugins · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page">
+  {% set page_title = "Plugins" %}
+  {% include "partials/page_header.html" %}
+  <article class="intro-band">
+    <div>
+      <p class="eyebrow">Small tools. Big possibilities.</p>
+      <h2>Give your learning a little superpower</h2>
+      <p>Explore trusted tools for notes, practice, and creative work.</p>
+    </div>
+    <a class="solid-btn" href="#tool-grid">Explore tools</a>
+  </article>
+  <div class="section-line">
+    <div class="chip-row" id="plugin-chips">
+      <button class="chip is-on" type="button" data-view="all">Discover</button>
+      <button class="chip" type="button" data-view="installed">My plugins ({{ installed_count }})</button>
+    </div>
+    <span>All tools are included with your academy account</span>
+  </div>
+  <div class="card-grid" id="tool-grid">
+    {% for item in plugins %}
+    <article class="idea-card" data-installed="{{ 'yes' if item.installed else 'no' }}">
+      <p class="status-pill">{{ "Installed" if item.installed else "Available" }}</p>
+      <h3>{{ item.name }}</h3>
+      <p>{{ item.blurb }}</p>
+      <div class="card-foot">
+        <span>Student-friendly</span>
+        {% if item.installed %}
+        <a class="solid-btn" href="{{ item.href }}">Open tool</a>
+        {% else %}
+        <form method="post" action="/plugins/{{ item.id }}/install">
+          <button class="solid-btn" type="submit">Add plugin</button>
+        </form>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  <div class="space-band" aria-hidden="true"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const grid = document.querySelector("#tool-grid");
+  document.querySelectorAll("#plugin-chips .chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      document.querySelectorAll("#plugin-chips .chip").forEach((item) => item.classList.toggle("is-on", item === chip));
+      const installedOnly = chip.dataset.view === "installed";
+      grid.querySelectorAll(".idea-card").forEach((card) => {
+        card.hidden = installedOnly && card.dataset.installed !== "yes";
+      });
+    });
+  });
+</script>
+{% endblock %}

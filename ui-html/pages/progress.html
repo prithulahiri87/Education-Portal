@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Progress · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page">
+  {% set page_title = "Progress" %}
+  {% include "partials/page_header.html" %}
+  <div class="stat-grid">
+    <article class="stat-card"><p>Modules completed</p><strong>{{ progress.completed }} / {{ progress.total }}</strong><span>{{ progress.percent }}% of your enrolled modules</span></article>
+    <article class="stat-card"><p>Quiz average</p><strong>{{ progress.quiz_average }}%</strong><span>Across {{ progress.quiz_count }} submitted quizzes</span></article>
+    <article class="stat-card"><p>Labs completed</p><strong>{{ progress.labs_completed }} / {{ progress.labs_total }}</strong><span>Lab sessions on your enrollments</span></article>
+    <article class="stat-card"><p>Assignments issued</p><strong>{{ progress.assignments|length }}</strong><span>Issued when a module is completed</span></article>
+  </div>
+  <div class="progress-split">
+    <article class="home-card">
+      <h2>Module progress</h2>
+      <p>{{ progress.completed }} completed · {{ progress.total - progress.completed }} still open</p>
+      <div class="track"><span style="width:{{ progress.percent }}%"></span></div>
+    </article>
+    <article class="home-card">
+      <h2>Labs</h2>
+      <div class="skill-row">
+        <div><span>Completed lab sessions</span><span>{{ progress.labs_completed }}</span></div>
+        <div class="track"><span style="width:{{ progress.percent }}%"></span></div>
+      </div>
+    </article>
+  </div>
+  <div class="progress-split lower">
+    <article class="home-card">
+      <h2>Assignment evaluation</h2>
+      <table class="score-table">
+        <thead><tr><th>Assignment name</th><th>Submitted</th><th>Score</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for item in progress.assignments %}
+          <tr><td>{{ item.name }}</td><td>{{ item.submitted }}</td><td>{{ item.score }}</td><td>{{ item.status }}</td></tr>
+          {% else %}
+          <tr><td colspan="4">Assignments appear after a module is completed.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </article>
+    <article class="home-card next-card">
+      <h2>Keep the momentum going</h2>
+      <p class="eyebrow">Your next milestone</p>
+      <h3>{{ progress.next_title or "You’re up to date" }}</h3>
+      <p>{% if progress.next_title %}This module is in progress on your enrollment.{% else %}No module is waiting in progress.{% endif %}</p>
+      <a class="solid-btn" href="/modules">Continue learning</a>
+    </article>
+  </div>
+  <div class="space-band" aria-hidden="true"></div>
+</section>
+{% endblock %}

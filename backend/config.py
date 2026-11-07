@@ -21,3 +21,18 @@ def get_settings() -> dict:
         "base_url": base_url.rstrip("/"),
         "model": model,
     }
+
+
+def get_postgres_settings() -> dict:
+    """Connection fields come from the environment. Nothing here is a secret literal."""
+    port = os.getenv("POSTGRES_PORT", "5432").strip() or "5432"
+    settings = {
+        "host": os.getenv("POSTGRES_HOST", "127.0.0.1").strip() or "127.0.0.1",
+        "port": int(port),
+        "dbname": os.getenv("POSTGRES_DB", "").strip(),
+        "user": os.getenv("POSTGRES_USER", "").strip(),
+    }
+    password = os.getenv("POSTGRES_PASSWORD", "").strip()
+    if password:
+        settings["password"] = password
+    return settings

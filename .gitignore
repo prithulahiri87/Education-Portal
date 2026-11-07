@@ -3,6 +3,7 @@
 __pycache__/
 *.pyc
 backend/chroma_data/
+backend/portal.db
 ui-react/node_modules/
 ui-react/dist/
 .DS_Store

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Python Learning Lab</title>
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f3f6fc;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  .lab {
+    max-width: 950px;
+    min-height: calc(100vh - 40px);
+    margin: auto;
+    background: white;
+    padding: 24px;
+    border-radius: 12px;
+    box-sizing: border-box;
+  }
+  textarea {
+    width: 100%;
+    height: 300px;
+    box-sizing: border-box;
+    padding: 15px;
+    background: #172033;
+    color: #e5edff;
+    font: 15px/1.5 monospace;
+  }
+  button {
+    padding: 10px 18px;
+    margin: 12px 6px 12px 0;
+    cursor: pointer;
+  }
+  pre {
+    padding: 16px;
+    background: #111827;
+    color: #bbf7d0;
+    min-height: 100px;
+    white-space: pre-wrap;
+  }
+</style>
+</head>
+
+<body>
+<div class="lab">
+  <h2>Python Programming Lab</h2>
+  <p>Class 9 - Introduction to Python</p>
+
+  <p id="status">Starting Python...</p>
+
+  <h3>Code Editor</h3>
+  <textarea id="code" spellcheck="false">name = "Student"
+marks = [80, 90, 85]
+
+print("Hello", name)
+print("Total:", sum(marks))
+print("Average:", sum(marks) / len(marks))</textarea>
+
+  <div>
+    <button id="run" disabled>Run Python</button>
+    <button id="stop">Stop</button>
+    <button id="save">Save Code</button>
+    <button id="reset">Reset</button>
+  </div>
+
+  <h3>Output</h3>
+  <pre id="output">Loading...</pre>
+</div>
+
+<script>
+const code = document.getElementById("code");
+const output = document.getElementById("output");
+const status = document.getElementById("status");
+const run = document.getElementById("run");
+
+const starter = code.value;
+const saved = localStorage.getItem("python-draft");
+if (saved !== null) code.value = saved;
+
+let worker;
+let timeout;
+
+function startWorker() {
+  if (worker) worker.terminate();
+  clearTimeout(timeout);
+
+  run.disabled = true;
+  status.textContent = "Loading Python...";
+  worker = new Worker("./python-worker.js", { type: "module" });
+
+  worker.onmessage = function(event) {
+    const data = event.data;
+
+    if (data.type === "ready") {
+      status.textContent = "Python ready";
+      run.disabled = false;
+    }
+
+    if (data.type === "result") {
+      clearTimeout(timeout);
+      output.textContent = data.output || "Done";
+      run.disabled = false;
+      status.textContent = "Python ready";
+    }
+
+    if (data.type === "error") {
+      clearTimeout(timeout);
+      output.textContent = data.message;
+      run.disabled = false;
+      status.textContent = "Python ready";
+    }
+  };
+
+  worker.onerror = function(event) {
+    clearTimeout(timeout);
+    status.textContent = "Python failed to load";
+    output.textContent = event.message;
+    run.disabled = true;
+  };
+}
+
+run.onclick = function() {
+  run.disabled = true;
+  status.textContent = "Running...";
+  output.textContent = "Executing...";
+
+  worker.postMessage({
+    type: "run",
+    code: code.value
+  });
+
+  timeout = setTimeout(() => {
+    output.textContent = "Execution timed out.";
+    startWorker();
+  }, 10000);
+};
+
+document.getElementById("stop").onclick =
+  function() {
+    output.textContent = "Execution stopped.";
+    startWorker();
+  };
+
+document.getElementById("save").onclick =
+  function() {
+    localStorage.setItem(
+      "python-draft", code.value
+    );
+    status.textContent = "Saved in this browser";
+  };
+
+document.getElementById("reset").onclick =
+  function() {
+    code.value = starter;
+    output.textContent = "Code reset.";
+  };
+
+startWorker();
+</script>
+</body>
+</html>

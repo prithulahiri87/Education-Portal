@@ -8,22 +8,32 @@ from typing import Optional, Union
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
 from backend.config import get_settings
+from backend.db import init_db
+from backend.pages.academy_api import router as academy_api_router
+from backend.pages.certification import router as certification_router
+from backend.pages.chat import router as chat_router
+from backend.pages.home import router as home_router
+from backend.pages.lab import router as lab_router
+from backend.pages.modules import router as modules_router
+from backend.pages.plugins import router as plugins_router
+from backend.pages.progress import router as progress_router
+from backend.pages.prompts import router as prompts_router
 from backend.rag import MissingApiKeyError, answer_question, latest_user_question
 from backend.store import store
 
 HTML_DIR = Path(__file__).resolve().parent.parent / "ui-html"
-HTML_PATH = HTML_DIR / "index.html"
 ASSETS_DIR = HTML_DIR / "assets"
 MAX_TEXT_CHARS = 1_000_000
 
 app = FastAPI(title="RAG Chatbot", version="0.1.0")
+init_db()
 if ASSETS_DIR.is_dir():
     app.mount("/assets", StaticFiles(directory=ASSETS_DIR), name="ui-assets")
+app.mount("/static", StaticFiles(directory=HTML_DIR), name="ui-static")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -63,9 +73,15 @@ def _llm_http_error(exc: Exception) -> HTTPException:
     return HTTPException(status_code=502, detail=str(exc))
 
 
-@app.get("/")
-def home():
-    return FileResponse(HTML_PATH)
+app.include_router(academy_api_router)
+app.include_router(home_router)
+app.include_router(chat_router)
+app.include_router(prompts_router)
+app.include_router(plugins_router)
+app.include_router(lab_router)
+app.include_router(modules_router)
+app.include_router(progress_router)
+app.include_router(certification_router)
 
 
 @app.get("/api/health")

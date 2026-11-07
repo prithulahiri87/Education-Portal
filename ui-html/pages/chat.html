@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block title %}New Chat · SPL Education Chatbot{% endblock %}
+{% block main %}
+<header class="chat-header" id="chat-header" hidden>
+  <div class="identity">
+    <button class="icon-btn reopen" id="reopen" type="button" aria-label="Open sidebar">
+      <img class="icon" src="/assets/sidebar-open.svg" alt="" width="16" height="16" />
+    </button>
+    <div class="avatar lg">
+      <img class="logo-mark" src="/assets/logo.jpg" alt="SPL Education Chatbot" width="40" height="40" />
+    </div>
+    <div class="identity-text">
+      <div class="title-row">
+        <p class="bot-name">SPL Education Chatbot</p>
+        <span class="model">GPT-4o</span>
+      </div>
+      <div class="status-row">
+        <img class="icon" id="status-dot" src="/assets/ellipse.svg" alt="" width="8" height="8" />
+        <p id="status">Always active &amp; ready</p>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="thread" id="thread" aria-live="polite" hidden></div>
+<div class="compose-status" id="typing" hidden>
+  <span>SPL is composing</span>
+  <img class="icon" src="/assets/typing-indicator.svg" alt="" width="34" height="22" />
+</div>
+<form class="composer" id="composer" hidden>
+  <div class="capsule">
+    <textarea id="message" rows="1" placeholder="Ask follow up questions, ask for optimization, or write templates..." required></textarea>
+    <div class="trailing">
+      <button class="send" id="send" type="submit" aria-label="Send message">
+        <img class="icon" src="/assets/arrow-up.svg" alt="" width="16" height="16" />
+      </button>
+    </div>
+  </div>
+</form>
+<section class="start-screen" id="start-screen">
+  <h1>How can I help you do your best work?</h1>
+  <form class="prompt-shell" id="start-form">
+    <div class="prompt-inner">
+      <textarea class="start-input" id="start-message" rows="2" placeholder="I'm your SPL Education assistant, ask me anything."></textarea>
+      <div class="prompt-toolbar">
+        <div class="tool-left"></div>
+        <div class="tool-right">
+          <button class="round-tool send" type="submit" aria-label="Send message">
+            <img class="icon" src="/assets/nc-arrow-up.svg" alt="" width="16" height="16" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <div class="suggest-row">
+    <button class="suggest-card" type="button" data-prompt="Chat with the agent for requests, bugs, questions, or feedback.">
+      <span class="card-title">Circuit Support &amp; Requests</span>
+      <p>Chat with the agent for requests, bugs, questions, or feedback.</p>
+    </button>
+    <button class="suggest-card" type="button" data-prompt="Track token consumption, cost, and usage patterns.">
+      <span class="card-title">Usage Dashboard</span>
+      <p>Track token consumption, cost, and usage patterns.</p>
+    </button>
+    <button class="suggest-card" type="button" data-prompt="See what's coming next, from exciting new features to key enhancements.">
+      <span class="card-title">Roadmap</span>
+      <p>See what's coming next, from exciting new features to key enhancements.</p>
+    </button>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const thread = document.querySelector("#thread");
+  const form = document.querySelector("#composer");
+  const input = document.querySelector("#message");
+  const send = document.querySelector("#send");
+  const startScreen = document.querySelector("#start-screen");
+  const chatHeader = document.querySelector("#chat-header");
+  const startInput = document.querySelector("#start-message");
+  const history = [];
+  let busy = false;
+
+  function setTyping(visible) {
+    document.querySelector("#typing").hidden = !visible;
+  }
+
+  function showThread() {
+    startScreen.hidden = true;
+    chatHeader.hidden = false;
+    thread.hidden = false;
+    form.hidden = false;
+  }
+
+  function bubble(text, role) {
+    const row = document.createElement("div");
+    row.className = "row" + (role === "user" ? " user" : "");
+    const stack = document.createElement("div");
+    stack.className = "stack";
+    const box = document.createElement("div");
+    box.className = "bubble" + (role === "user" ? " user" : "");
+    const body = document.createElement("p");
+    body.textContent = text;
+    box.appendChild(body);
+    stack.appendChild(box);
+    row.appendChild(stack);
+    thread.appendChild(row);
+    row.scrollIntoView({ block: "nearest" });
+  }
+
+  async function ask(message) {
+    if (!message || busy) return;
+    busy = true;
+    send.disabled = true;
+    showThread();
+    bubble(message, "user");
+    input.value = "";
+    setTyping(true);
+    const prior = history.slice();
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message, history: prior }),
+      });
+      const data = await response.json();
+      const answer = response.ok ? data.answer : (typeof data.detail === "string" ? data.detail : "Request failed.");
+      bubble(answer, "assistant");
+      if (response.ok) {
+        history.push({ role: "user", content: message });
+        history.push({ role: "assistant", content: data.answer });
+      }
+    } catch (err) {
+      bubble("Could not reach the API.", "assistant");
+    } finally {
+      busy = false;
+      send.disabled = false;
+      setTyping(false);
+      input.focus();
+    }
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    ask(input.value.trim());
+  });
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      form.requestSubmit();
+    }
+  });
+  document.querySelector("#start-form").addEventListener("submit", (event) => {
+    event.preventDefault();
+    const message = startInput.value.trim();
+    if (!message) return;
+    thread.replaceChildren();
+    ask(message);
+  });
+  document.querySelectorAll(".suggest-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      thread.replaceChildren();
+      ask(card.dataset.prompt);
+    });
+  });
+  const preset = new URLSearchParams(location.search).get("q");
+  if (preset) {
+    thread.replaceChildren();
+    ask(preset);
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,11 @@
+<article class="plugin-row" data-name="{{ item.name }}">
+  <span class="app-chip {{ item.mark_class }}">{{ item.mark }}</span>
+  <div class="plugin-copy"><strong>{{ item.name }}</strong><span>{{ item.blurb }}</span></div>
+  {% if item.installed %}
+  <button class="plugin-more" type="button" aria-label="{{ item.name }} options">…</button>
+  {% else %}
+  <form method="post" action="/plugins/{{ item.id }}/install">
+    <button class="plugin-add" type="submit" aria-label="Add {{ item.name }}">+</button>
+  </form>
+  {% endif %}
+</article>

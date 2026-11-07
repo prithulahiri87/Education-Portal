@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Lab · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page lab-fig">
+  <header class="fig-header">
+    <div>
+      <h1>TechLearn Academy Lab Portal</h1>
+    </div>
+    <div class="sky" aria-hidden="true">
+      <svg viewBox="0 0 210 72" width="210" height="72">
+        <circle cx="34" cy="34" r="16" fill="#7ED0A6"/>
+        <ellipse cx="34" cy="34" rx="28" ry="8" fill="none" stroke="#5EBE8C" stroke-width="3" transform="rotate(-18 34 34)"/>
+        <path d="M86 18l4 8 8 1-6 5 2 8-8-4-8 4 2-8-6-5 8-1z" fill="#F6C14A"/>
+        <circle cx="132" cy="36" r="16" fill="#F4A35A"/>
+        <ellipse cx="132" cy="36" rx="28" ry="8" fill="none" stroke="#E08A45" stroke-width="3" transform="rotate(-16 132 36)"/>
+        <path d="M184 16l3.5 7 7 1-5.5 4.5 1.5 7-6.5-3.5-6.5 3.5 1.5-7-5.5-4.5 7-1z" fill="#7ED0A6"/>
+      </svg>
+    </div>
+    <div class="fig-tools">
+      <button class="fig-bell" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.2a3.2 3.2 0 0 0-3.2 3.2v1.4c0 .5-.2 1-.5 1.4L3.2 9.6h9.6L11.7 8.2c-.3-.4-.5-.9-.5-1.4V5.4A3.2 3.2 0 0 0 8 2.2Z" stroke="#64748b" stroke-width="1.3"/><path d="M6.6 11.2a1.4 1.4 0 0 0 2.8 0" stroke="#64748b" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <span class="fig-avatar" aria-hidden="true">PL</span>
+    </div>
+  </header>
+
+  <div class="lab-intro">
+    <h2>Computer &amp; AI Learning Lab</h2>
+    <p>Interactive portal layout concept</p>
+  </div>
+
+  <section class="lab-board">
+    <div class="lab-switch">
+      <div class="lab-choice">
+        <span>Board</span>
+        <div role="tablist" aria-label="Board">
+          {% for board in boards %}
+          <a class="pill{% if board.code == selected_board %} is-on{% endif %}" href="/lab?board={{ board.code }}&grade={{ selected_grade }}">{{ board.code }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="lab-choice">
+        <span>Class</span>
+        <div role="tablist" aria-label="Class">
+          {% for grade in classes %}
+          <a class="pill{% if grade == selected_grade %} is-on{% endif %}" href="/lab?board={{ selected_board }}&grade={{ grade }}">{{ grade }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="lab-status">
+        <strong>{{ selected_board }} · Class {{ selected_grade }}</strong>
+        <span>Tools follow this board and class</span>
+      </div>
+    </div>
+    <div class="tool-grid">
+      {% for tool in tools %}
+      <article class="tool-card">
+        <span class="tool-icon" aria-hidden="true">
+          {% if tool.icon == "code" %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M10 9 6 14l4 5M18 9l4 5-4 5M15.5 7l-3 14" stroke="#111827" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {% elif tool.icon == "chart" %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 22V6M6 22h16" stroke="#111827" stroke-width="1.7" stroke-linecap="round"/><path d="M10 17v3M14 12v8M18 15v5M22 9v11" stroke="#111827" stroke-width="1.7" stroke-linecap="round"/></svg>
+          {% elif tool.icon == "spark" %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="8" cy="10" r="2" stroke="#111827" stroke-width="1.6"/><circle cx="18" cy="8" r="2" stroke="#111827" stroke-width="1.6"/><circle cx="20" cy="18" r="2" stroke="#111827" stroke-width="1.6"/><circle cx="10" cy="19" r="2" stroke="#111827" stroke-width="1.6"/><path d="M10 10.5 16.2 9M18.8 10l.6 6M18.2 18.4 12 19.2M9.2 17.2 8.4 12" stroke="#111827" stroke-width="1.5"/></svg>
+          {% elif tool.icon == "grid" %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="5" y="6" width="18" height="16" rx="2" stroke="#111827" stroke-width="1.7"/><path d="M5 11h18M14 11v11" stroke="#111827" stroke-width="1.7"/></svg>
+          {% elif tool.icon == "java" %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M9 11c2 1.2 3.2 1.2 5 0 1.8 1.2 3 1.2 5 0" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/><path d="M9 15c2 1.2 3.2 1.2 5 0 1.8 1.2 3 1.2 5 0" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/><path d="M10 19.5c2.2 1.4 5.8 1.4 8 0" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/><path d="M14 6.5v2.2" stroke="#111827" stroke-width="1.6" stroke-linecap="round"/></svg>
+          {% else %}
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="6" width="20" height="13" rx="2" stroke="#111827" stroke-width="1.7"/><path d="M10 22h8M14 19v3" stroke="#111827" stroke-width="1.7" stroke-linecap="round"/></svg>
+          {% endif %}
+        </span>
+        <h3>{{ tool.title }}</h3>
+        <p>{{ tool.body }}</p>
+        <a href="{{ tool.href }}"{% if not tool.same_tab %} target="_blank" rel="noopener"{% endif %}>Open tool
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3H3.5A1.5 1.5 0 0 0 2 4.5v8A1.5 1.5 0 0 0 3.5 14h8a1.5 1.5 0 0 0 1.5-1.5V10" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M9 2h5v5M14 2 7.5 8.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </article>
+      {% else %}
+      <p class="lab-note">No labs are stored for this board and class yet.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <div class="play-band" aria-hidden="true">
+    <svg viewBox="0 0 1100 140" width="100%" height="140">
+      <path d="M70 48l8 16 16 2-12 10 4 16-16-8-16 8 4-16-12-10 16-2z" fill="#F6C14A"/>
+      <circle cx="210" cy="78" r="7" fill="#7ED0A6"/>
+      <circle cx="310" cy="62" r="18" fill="#F4A35A"/>
+      <ellipse cx="310" cy="62" rx="32" ry="8" fill="none" stroke="#E08A45" stroke-width="3" transform="rotate(-18 310 62)"/>
+      <circle cx="430" cy="78" r="16" fill="#D9D3CB"/>
+      <circle cx="520" cy="96" r="6" fill="#F6C14A"/>
+      <path d="M610 40l8 48 10-28 8 36" stroke="#F07167" stroke-width="6" stroke-linecap="round" fill="none"/>
+      <path d="M690 42l6 12 12 2-9 8 3 12-12-6-12 6 3-12-9-8 12-2z" fill="#7ED0A6"/>
+      <circle cx="820" cy="70" r="22" fill="#7EB6F6"/>
+      <circle cx="820" cy="70" r="8" fill="#5B8DEF"/>
+      <path d="M940 48h28a10 10 0 0 1 10 10v16a10 10 0 0 1-10 10H948l-12 10v-10h-8a10 10 0 0 1-10-10V58a10 10 0 0 1 10-10z" fill="#C4B5FD"/>
+    </svg>
+  </div>
+</section>
+{% endblock %}

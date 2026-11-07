@@ -12,6 +12,43 @@ class MissingApiKeyError(Exception):
     """Raised when OPENAI_API_KEY is not configured."""
 
 
+# Chroma L2 distance. Matches inside sample.md land below this; other topics sit above it.
+MAX_RELEVANT_DISTANCE = 1.55
+
+
+def relevant_sources(sources: list[dict]) -> list[dict]:
+    """Keep passages that are actually about the question. A weak nearest match is not a hit."""
+    if not sources:
+        return []
+    best = sources[0].get("distance")
+    if best is None or best > MAX_RELEVANT_DISTANCE:
+        return []
+    return [
+        item
+        for item in sources
+        if item.get("distance") is None or item["distance"] <= MAX_RELEVANT_DISTANCE
+    ]
+
+
+def build_direct_messages(question: str, history: list[dict]) -> list[dict]:
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are a helpful assistant. The question is not covered by the stored documents. "
+                "Answer it directly."
+            ),
+        }
+    ]
+    for item in history:
+        role = item.get("role")
+        content = (item.get("content") or "").strip()
+        if role in ("user", "assistant") and content:
+            messages.append({"role": role, "content": content})
+    messages.append({"role": "user", "content": question})
+    return messages
+
+
 def build_messages(question: str, history: list[dict], sources: list[dict]) -> list[dict]:
     if sources:
         blocks = []
@@ -61,8 +98,12 @@ def latest_user_question(messages: list[dict]) -> tuple[str | None, list[dict]]:
 
 
 async def answer_question(question: str, history: list[dict] | None = None) -> dict:
-    sources = store.query(question)
-    messages = build_messages(question, history or [], sources)
+    history = history or []
+    sources = relevant_sources(store.query(question))
+    if sources:
+        messages = build_messages(question, history, sources)
+    else:
+        messages = build_direct_messages(question, history)
     reply = await complete(messages)
     return {"answer": reply, "sources": sources}
 

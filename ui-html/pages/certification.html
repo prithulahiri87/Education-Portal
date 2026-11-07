@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Certification · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page">
+  {% set page_title = "Certification" %}
+  {% include "partials/page_header.html" %}
+  <div class="section-line">
+    <h2>Your achievements</h2>
+    <span>1 certificate earned · 1 learning pathway in progress</span>
+  </div>
+  <div class="cert-layout">
+    <article class="home-card certificate">
+      <div class="certificate-sheet">
+        <p class="eyebrow">TechLearn Academy</p>
+        <p class="cert-kicker">Certificate of achievement</p>
+        <h2>Prithu Lahiri</h2>
+        <p>has successfully completed</p>
+        <h3>Technology foundations</h3>
+        <p>Digital foundations · AI &amp; robotics · Computational thinking</p>
+        <div class="cert-meta"><span>Issued 02 Nov 2026</span><span>TLA-7-2026-041</span></div>
+      </div>
+      <div class="cert-actions">
+        <div>
+          <h3>Technology foundations</h3>
+          <p>Awarded for completing Modules 01–04</p>
+        </div>
+        <a class="solid-btn" href="/certification/download">Download PDF</a>
+        <button class="ghost-btn" id="share-cert" type="button">Share</button>
+      </div>
+      <p class="hint" id="share-note" hidden>Certificate link copied: Technology foundations · TLA-7-2026-041</p>
+    </article>
+    <article class="home-card">
+      <p class="eyebrow">Your next milestone</p>
+      <h2>Technology Explorer</h2>
+      <p>Complete your Class 7 learning pathway and put your new skills to work.</p>
+      <div class="skill-row">
+        <div><span>4 of 8 modules completed</span><span>50%</span></div>
+        <div class="track"><span style="width:50%"></span></div>
+      </div>
+      <h3>Still to explore</h3>
+      <p>Python · Creative problem solving · Chatbots · Your capstone</p>
+      <a class="solid-btn" href="/modules">Continue learning</a>
+    </article>
+  </div>
+  <article class="home-card roadmap">
+    <h2>Your roadmap to certification</h2>
+    <p>A little progress every day brings your next achievement closer.</p>
+    <div class="roadmap-grid">
+      <div>
+        <h3>01 · Complete the pathway</h3>
+        <p>Finish all 8 modules and their practice activities.</p>
+        <span>4 of 8 complete</span>
+      </div>
+      <div>
+        <h3>02 · Show what you’ve learned</h3>
+        <p>Earn an average score of at least 80%.</p>
+        <span>88% average · On track</span>
+      </div>
+      <div>
+        <h3>03 · Create your capstone</h3>
+        <p>Submit your final project after Module 08.</p>
+        <span>Not started</span>
+      </div>
+    </div>
+  </article>
+  <div class="space-band" aria-hidden="true"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.querySelector("#share-cert").addEventListener("click", async () => {
+    const text = "Technology foundations · TLA-7-2026-041";
+    try { await navigator.clipboard.writeText(text); } catch (error) {}
+    document.querySelector("#share-note").hidden = false;
+  });
+</script>
+{% endblock %}

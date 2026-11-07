@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+{% block title %}Home · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page home-fig">
+  <header class="fig-header">
+    <h1>TechLearn Academy Student Portal</h1>
+    <div class="sky" aria-hidden="true">
+      <svg viewBox="0 0 180 64" width="180" height="64">
+        <circle cx="28" cy="30" r="16" fill="#7ED0A6"/>
+        <ellipse cx="28" cy="30" rx="26" ry="7" fill="none" stroke="#5EBE8C" stroke-width="3"/>
+        <path d="M70 18l4 8 8 1-6 5 2 8-8-4-8 4 2-8-6-5 8-1z" fill="#F6C14A"/>
+        <circle cx="118" cy="28" r="14" fill="#F4A35A"/>
+        <ellipse cx="118" cy="30" rx="26" ry="7" fill="none" stroke="#E08A45" stroke-width="3"/>
+        <path d="M156 14l3 6 6 1-5 4 1 6-5-3-5 3 1-6-5-4 6-1z" fill="#7ED0A6"/>
+      </svg>
+    </div>
+    <div class="fig-tools">
+      <button class="fig-bell" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.2a3.2 3.2 0 0 0-3.2 3.2v1.4c0 .5-.2 1-.5 1.4L3.2 9.6h9.6L11.7 8.2c-.3-.4-.5-.9-.5-1.4V5.4A3.2 3.2 0 0 0 8 2.2Z" stroke="#64748b" stroke-width="1.3"/><path d="M6.6 11.2a1.4 1.4 0 0 0 2.8 0" stroke="#64748b" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <span class="fig-avatar" aria-hidden="true">PL</span>
+    </div>
+  </header>
+
+  <div class="fig-row fig-top">
+    <article class="fig-card profile-card peach">
+      <span class="initials">PL</span>
+      <div>
+        <h2>Prithu Lahiri</h2>
+        <p class="kicker">Student profile details</p>
+        <ul>
+          <li>Student ID: {{ student.student_code if student else "—" }}</li>
+          <li>Account: {{ student.name if student else "—" }}</li>
+          <li>Enrollment: {{ student.enrollment if student else "—" }}</li>
+          <li>Degree: {{ student.degree if student else "—" }}</li>
+          <li>Advisor: {{ student.advisor if student else "—" }}</li>
+          <li>Join Date: {{ student.join_date if student else "—" }}</li>
+          <li>Current Semester: {{ student.semester if student else "—" }}</li>
+          <li>Credits Earned: {{ student.credits_earned if student else 0 }} / {{ student.credits_total if student else 0 }}</li>
+        </ul>
+      </div>
+      <svg class="spot spot-mini" viewBox="0 0 48 40" aria-hidden="true"><rect x="10" y="12" width="26" height="20" rx="8" fill="#8EAEFF"/><circle cx="19" cy="21" r="2" fill="#fff"/><circle cx="28" cy="21" r="2" fill="#fff"/><rect x="20" y="4" width="6" height="8" rx="3" fill="#C5D4FF"/><circle cx="23" cy="4" r="3" fill="#F6B24A"/></svg>
+      <svg class="spot spot-bot" viewBox="0 0 88 52" aria-hidden="true"><rect x="4" y="16" width="28" height="22" rx="8" fill="#8EAEFF"/><circle cx="14" cy="26" r="2" fill="#fff"/><circle cx="22" cy="26" r="2" fill="#fff"/><rect x="40" y="18" width="28" height="22" rx="8" fill="#A9C0FF"/><circle cx="50" cy="28" r="2" fill="#fff"/><circle cx="58" cy="28" r="2" fill="#fff"/></svg>
+      <svg class="spot spot-chip" viewBox="0 0 56 56" aria-hidden="true"><rect x="12" y="12" width="32" height="32" rx="8" fill="#E8F1FF" stroke="#8EB4F5" stroke-width="2"/><text x="28" y="33" text-anchor="middle" font-size="12" font-weight="700" fill="#3B6FD6">AI</text></svg>
+    </article>
+
+    <article class="fig-card live-card mint">
+      <h2>Live Session</h2>
+      <div class="live-icons">
+        <span class="cam" aria-hidden="true"></span>
+        <svg viewBox="0 0 48 40" width="48" height="40" aria-hidden="true"><rect x="8" y="10" width="28" height="22" rx="8" fill="#8EAEFF"/><circle cx="18" cy="20" r="2.2" fill="#fff"/><circle cx="27" cy="20" r="2.2" fill="#fff"/><rect x="18" y="2" width="6" height="8" rx="3" fill="#C5D4FF"/><circle cx="21" cy="2" r="3" fill="#F6B24A"/></svg>
+      </div>
+      <button class="fig-fill" type="button">Live Session</button>
+      <button class="fig-soft" type="button">Create notes</button>
+      <svg class="arm arm-left" viewBox="0 0 70 48" aria-hidden="true"><path d="M8 36c12-18 24-22 40-16" stroke="#8EAEFF" stroke-width="8" stroke-linecap="round"/><circle cx="52" cy="18" r="8" fill="#F6B24A"/></svg>
+      <svg class="arm arm-right" viewBox="0 0 70 48" aria-hidden="true"><path d="M62 36C50 18 38 14 22 20" stroke="#8EAEFF" stroke-width="8" stroke-linecap="round"/><circle cx="18" cy="18" r="8" fill="#F6B24A"/></svg>
+    </article>
+
+    <article class="fig-card classes-card peach">
+      <h2>My Classes</h2>
+      <a class="text-link" href="/modules">View Classes</a>
+      <ul class="class-list">
+        {% for item in offerings %}
+        <li><a href="/modules?offering={{ item.offering_id }}">{{ item.board }} Class {{ item.grade }} · {{ item.subject }}</a></li>
+        {% else %}
+        <li>No academy enrollment yet</li>
+        {% endfor %}
+      </ul>
+      <svg class="spot spot-class" viewBox="0 0 110 70" aria-hidden="true"><rect x="8" y="24" width="36" height="28" rx="10" fill="#8EAEFF"/><circle cx="20" cy="36" r="2.4" fill="#fff"/><circle cx="30" cy="36" r="2.4" fill="#fff"/><rect x="58" y="20" width="40" height="32" rx="12" fill="#A9C0FF"/><circle cx="72" cy="34" r="2.6" fill="#fff"/><circle cx="84" cy="34" r="2.6" fill="#fff"/></svg>
+    </article>
+  </div>
+
+  <div class="fig-row fig-mid">
+    <article class="fig-card peach">
+      <h2>Upload content</h2>
+      <div class="upload-grid">
+        <button type="button">
+          <span class="orb orb-blue" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="14" y="10" width="20" height="26" rx="3" fill="#fff"/><path d="M18 18h12M18 23h12M18 28h8" stroke="#3B82F6" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <strong>Documents</strong><span>Notes, articles, and files</span>
+        </button>
+        <button type="button">
+          <span class="orb orb-green" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="10" fill="#fff"/><path d="M22 18v12l10-6-10-6Z" fill="#22A06B"/></svg></span>
+          <strong>Videos</strong><span>Intro to Python lessons</span>
+        </button>
+        <button type="button">
+          <span class="orb orb-red" aria-hidden="true"><svg viewBox="0 0 48 48"><rect x="14" y="16" width="20" height="16" rx="6" fill="#fff"/><circle cx="21" cy="23" r="1.6" fill="#EF4444"/><circle cx="27" cy="23" r="1.6" fill="#EF4444"/></svg></span>
+          <strong>Video Classes</strong><span>Live class recordings</span>
+        </button>
+        <button type="button">
+          <span class="orb orb-orange" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="7" fill="none" stroke="#fff" stroke-width="3"/><path d="M24 10v4M24 34v4M10 24h4M34 24h4M14 14l3 3M31 31l3 3M34 14l-3 3M17 31l-3 3" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <strong>Resources</strong><span>Slides, labs, and references</span>
+        </button>
+      </div>
+    </article>
+    <article class="fig-card peach notice-panel">
+      <div class="notice-head">
+        <h2>Notifications</h2>
+        <span class="notice-count" id="notice-count">3 unread</span>
+        <button class="notice-mark" id="notice-mark" type="button">Mark all as read</button>
+      </div>
+      <div class="notice-tabs" role="tablist" aria-label="Notification filter">
+        <button class="is-on" type="button" data-filter="all">All</button>
+        <button type="button" data-filter="unread">Unread</button>
+      </div>
+      <ul class="note-list" id="note-list">
+        <li data-read="false">
+          <span class="notice-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Grade published</strong>
+            <p>Digital safety quiz scored 92 / 100.</p>
+            <span>Academics · 26 Oct 2026</span>
+          </div>
+        </li>
+        <li data-read="false">
+          <span class="notice-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Course update</strong>
+            <p>Module 05 is now open for Class 7.</p>
+            <span>Learning · Today</span>
+          </div>
+        </li>
+        <li data-read="false">
+          <span class="notice-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Reminder</strong>
+            <p>Logic challenge is due on 2 Nov.</p>
+            <span>Assignments · Yesterday</span>
+          </div>
+        </li>
+        <li data-read="true" class="is-read">
+          <span class="notice-dot" aria-hidden="true"></span>
+          <div>
+            <strong>Profile</strong>
+            <p>Your Class 7 student profile is up to date.</p>
+            <span>Account · 3 days ago</span>
+          </div>
+        </li>
+      </ul>
+    </article>
+  </div>
+
+  <div class="fig-row fig-low">
+    <article class="fig-card compact peach"><h2>Attendance</h2></article>
+    <article class="fig-card compact peach"><h2>Student progress</h2></article>
+    <article class="fig-card compact peach">
+      <h2>Assignment evaluation</h2>
+      <div class="assign-head">
+        <span>Assignment Name</span>
+        <span class="pill">Due Date</span>
+        <span>Submitted Date</span>
+        <span class="pill">Score</span>
+      </div>
+    </article>
+  </div>
+
+  <div class="play-band" aria-hidden="true">
+    <svg viewBox="0 0 1100 140" preserveAspectRatio="xMidYMid meet">
+      <path d="M40 40l8 16 16 2-12 10 4 16-16-8-16 8 4-16-12-10 16-2z" fill="#F6C14A"/>
+      <circle cx="180" cy="90" r="10" fill="#7ED0A6"/>
+      <circle cx="250" cy="48" r="22" fill="#F4A35A"/>
+      <ellipse cx="250" cy="50" rx="38" ry="10" fill="none" stroke="#5EBE8C" stroke-width="4"/>
+      <circle cx="430" cy="100" r="16" fill="#D7DEE8"/>
+      <circle cx="430" cy="100" r="6" fill="#C5CED8"/>
+      <path d="M620 96l18-46 10 8-8 38z" fill="#F07A7A"/>
+      <path d="M638 50l16 10-18 8z" fill="#F6C14A"/>
+      <circle cx="700" cy="108" r="8" fill="#F6C14A"/>
+      <circle cx="860" cy="88" r="26" fill="#8EB4F5"/>
+      <circle cx="860" cy="88" r="8" fill="#E8F1FF"/>
+      <rect x="980" y="62" width="36" height="28" rx="10" fill="#8EAEFF"/>
+      <circle cx="992" cy="74" r="2" fill="#fff"/>
+      <circle cx="1004" cy="74" r="2" fill="#fff"/>
+      <path d="M760 30l6 12 12 2-9 8 3 12-12-6-12 6 3-12-9-8 12-2z" fill="#7ED0A6"/>
+    </svg>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const list = document.querySelector("#note-list");
+  const count = document.querySelector("#notice-count");
+  function unreadCount() {
+    return list.querySelectorAll("li[data-read='false']").length;
+  }
+  function paintCount() {
+    const total = unreadCount();
+    count.textContent = total === 1 ? "1 unread" : total + " unread";
+  }
+  document.querySelector("#notice-mark").addEventListener("click", () => {
+    list.querySelectorAll("li").forEach((item) => {
+      item.dataset.read = "true";
+      item.classList.add("is-read");
+    });
+    paintCount();
+  });
+  document.querySelectorAll(".notice-tabs button").forEach((button) => {
+    button.addEventListener("click", () => {
+      document.querySelectorAll(".notice-tabs button").forEach((item) => item.classList.toggle("is-on", item === button));
+      const unreadOnly = button.dataset.filter === "unread";
+      list.querySelectorAll("li").forEach((item) => {
+        item.hidden = unreadOnly && item.dataset.read === "true";
+      });
+    });
+  });
+  paintCount();
+</script>
+{% endblock %}

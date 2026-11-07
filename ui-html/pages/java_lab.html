@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICSE Java Coding Lab</title>
+  <style>
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    .lab {
+      max-width: 1000px;
+      min-height: calc(100vh - 48px);
+      margin: auto;
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      box-sizing: border-box;
+      width: 100%;
+      height: 320px;
+      font: 14px monospace;
+      padding: 16px;
+    }
+
+    button {
+      margin-top: 12px;
+      padding: 10px 24px;
+      background: #2563eb;
+      color: white;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    pre {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      min-height: 100px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="lab">
+    <h2>ICSE Java Programming Lab</h2>
+    <p>Class 9 - Introduction to Java</p>
+
+    <textarea id="code" spellcheck="false">public class Main {
+    public static void main(String[] args) {
+        System.out.println("Hello Students!");
+    }
+}</textarea>
+
+    <button type="button" onclick="runJava()">Run Java</button>
+
+    <h3>Program Output</h3>
+    <pre id="output">Click Run Java</pre>
+  </div>
+
+  <script>
+    async function runJava() {
+      const output = document.getElementById("output");
+      output.textContent = "Running...";
+      try {
+        const response = await fetch("/api/java/run", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            code: document.getElementById("code").value
+          })
+        });
+        if (!response.ok) {
+          throw new Error("Execution unavailable");
+        }
+        const result = await response.json();
+        output.textContent = result.output || "No output";
+      } catch (error) {
+        output.textContent = error.message;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Browse Prompts · TechLearn Academy{% endblock %}
+{% block main %}
+<section class="fig-page prompt-fig">
+  <header class="fig-header">
+    <div>
+      <h1>Browse Prompts</h1>
+      <p class="fig-lead">A little inspiration for your next big question.</p>
+    </div>
+    <div class="sky" aria-hidden="true">
+      <svg viewBox="0 0 210 72" width="210" height="72">
+        <circle cx="34" cy="34" r="16" fill="#7ED0A6"/>
+        <ellipse cx="34" cy="34" rx="28" ry="8" fill="none" stroke="#5EBE8C" stroke-width="3" transform="rotate(-18 34 34)"/>
+        <path d="M86 18l4 8 8 1-6 5 2 8-8-4-8 4 2-8-6-5 8-1z" fill="#F6C14A"/>
+        <circle cx="132" cy="36" r="16" fill="#F4A35A"/>
+        <ellipse cx="132" cy="36" rx="28" ry="8" fill="none" stroke="#5EBE8C" stroke-width="3" transform="rotate(-16 132 36)"/>
+        <path d="M184 16l3.5 7 7 1-5.5 4.5 1.5 7-6.5-3.5-6.5 3.5 1.5-7-5.5-4.5 7-1z" fill="#7ED0A6"/>
+      </svg>
+    </div>
+    <div class="fig-tools">
+      <button class="fig-bell" type="button" aria-label="Notifications">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2.2a3.2 3.2 0 0 0-3.2 3.2v1.4c0 .5-.2 1-.5 1.4L3.2 9.6h9.6L11.7 8.2c-.3-.4-.5-.9-.5-1.4V5.4A3.2 3.2 0 0 0 8 2.2Z" stroke="#64748b" stroke-width="1.3"/><path d="M6.6 11.2a1.4 1.4 0 0 0 2.8 0" stroke="#64748b" stroke-width="1.3" stroke-linecap="round"/></svg>
+      </button>
+      <span class="fig-avatar photo" aria-hidden="true">
+        <svg viewBox="0 0 36 36" width="36" height="36"><circle cx="18" cy="18" r="18" fill="#F3D2C2"/><circle cx="18" cy="15" r="6" fill="#E7B49A"/><path d="M6 32c2.2-6 6-9 12-9s9.8 3 12 9" fill="#3B4258"/></svg>
+      </span>
+    </div>
+  </header>
+
+  <div class="chip-row" id="prompt-chips">
+    <button class="chip is-on" type="button" data-topic="all">All prompts</button>
+    <button class="chip" type="button" data-topic="ai">AI &amp; Robotics</button>
+    <button class="chip" type="button" data-topic="python">Python</button>
+    <button class="chip" type="button" data-topic="maths">Maths</button>
+    <button class="chip" type="button" data-topic="science">Science</button>
+    <button class="chip" type="button" data-topic="writing">Creative writing</button>
+  </div>
+
+  <div class="section-line">
+    <h2>Find your next idea</h2>
+    <span id="prompt-count">{{ prompts|length }} prompts to kick-start your learning</span>
+  </div>
+
+  <div class="card-grid" id="prompt-grid">
+    {% for item in prompts %}
+    <article class="idea-card tone-{{ item.topic }}" data-topic="{{ item.topic }}" data-saved="{{ 'yes' if item.saved else 'no' }}">
+      <div class="card-top">
+        <div class="prompt-art" aria-hidden="true">
+          {% if item.topic == "ai" %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><rect x="16" y="22" width="32" height="26" rx="10" fill="#A78BFA"/><circle cx="27" cy="33" r="3.2" fill="#fff"/><circle cx="37" cy="33" r="3.2" fill="#fff"/><path d="M26 41h12" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="29" y="12" width="6" height="10" rx="3" fill="#C4B5FD"/><circle cx="32" cy="10" r="4" fill="#F6C14A"/><rect x="8" y="30" width="8" height="12" rx="4" fill="#C4B5FD"/><rect x="48" y="30" width="8" height="12" rx="4" fill="#C4B5FD"/></svg>
+          {% elif item.topic == "python" %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><rect x="10" y="14" width="44" height="36" rx="8" fill="#22C55E"/><path d="M18 28h10M18 36h18" stroke="#fff" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="24" r="4" fill="#F6C14A"/></svg>
+          {% elif item.topic == "maths" %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="32" r="18" fill="#F6C14A"/><path d="M32 14v18L46 40" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M32 14a18 18 0 0 1 16 26" fill="#F4A35A"/></svg>
+          {% elif item.topic == "science" %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><circle cx="32" cy="34" r="14" fill="#60A5FA"/><ellipse cx="32" cy="34" rx="24" ry="7" fill="none" stroke="#34D399" stroke-width="3" transform="rotate(-18 32 34)"/><circle cx="48" cy="18" r="3" fill="#F6C14A"/></svg>
+          {% elif item.topic == "writing" %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><path d="M16 46V20a4 4 0 0 1 4-4h12v30H20a4 4 0 0 0-4 4Z" fill="#F9A8D4"/><path d="M48 46V20a4 4 0 0 0-4-4H32v30h12a4 4 0 0 1 4 4Z" fill="#FBCFE8"/><path d="M40 18l8 4-14 28-8-2 14-30Z" fill="#6D5EFC"/></svg>
+          {% else %}
+          <svg viewBox="0 0 64 64" width="48" height="48"><rect x="14" y="12" width="36" height="40" rx="8" fill="#FDE047"/><path d="M22 26h12M22 34h16M22 42h10" stroke="#A16207" stroke-width="3" stroke-linecap="round"/><circle cx="44" cy="42" r="6" fill="#6D5EFC"/><path d="M41.5 42.2l1.6 1.6 3.2-3.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          {% endif %}
+        </div>
+        <div>
+          <p class="eyebrow">{{ item.topic_label }}</p>
+          <h3>{{ item.title }}</h3>
+        </div>
+      </div>
+      <p>{{ item.body }}</p>
+      <div class="card-foot">
+        <span>{{ item.level }}</span>
+        <a class="solid-btn" href="{{ item.href }}">Use prompt</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <p class="prompt-tip"><strong>A great prompt starts with a clear goal.</strong> <span>Add context, ask for examples, and make it your own.</span></p>
+
+  <div class="play-band" aria-hidden="true">
+    <svg viewBox="0 0 1100 150" preserveAspectRatio="xMidYMid meet">
+      <circle cx="70" cy="96" r="28" fill="#F4A35A"/>
+      <ellipse cx="70" cy="96" rx="48" ry="12" fill="none" stroke="#5EBE8C" stroke-width="4" transform="rotate(-18 70 96)"/>
+      <path d="M150 28l7 14 14 2-11 9 3 14-13-7-13 7 3-14-11-9 14-2z" fill="#F6C14A"/>
+      <circle cx="210" cy="108" r="8" fill="#7ED0A6"/>
+      <circle cx="280" cy="112" r="22" fill="#D5DDEA"/>
+      <circle cx="280" cy="112" r="8" fill="#C3CDD8"/>
+      <circle cx="318" cy="96" r="14" fill="#E2E8F0"/>
+      <circle cx="318" cy="96" r="5" fill="#C9D2DC"/>
+      <path d="M470 118l22-62 14 10-10 52z" fill="#F07A7A"/>
+      <path d="M492 52l22 12-24 10z" fill="#F6C14A"/>
+      <path d="M478 108h28l-6 16h-16z" fill="#8EB4F5"/>
+      <circle cx="560" cy="124" r="6" fill="#F6C14A"/>
+      <path d="M640 36l6 12 12 2-9 8 3 12-12-6-12 6 3-12-9-8 12-2z" fill="#7ED0A6"/>
+      <circle cx="760" cy="108" r="26" fill="#8EB4F5"/>
+      <circle cx="760" cy="108" r="9" fill="#E8F1FF"/>
+      <path d="M820 48l5 10 10 1-8 7 2 10-9-5-9 5 2-10-8-7 10-1z" fill="#7ED0A6"/>
+      <circle cx="900" cy="70" r="7" fill="#7ED0A6"/>
+      <rect x="980" y="78" width="46" height="36" rx="12" fill="#8EAEFF"/>
+      <circle cx="994" cy="92" r="3" fill="#fff"/>
+      <circle cx="1012" cy="92" r="3" fill="#fff"/>
+      <rect x="996" y="64" width="8" height="14" rx="3" fill="#C9D8FF"/>
+      <circle cx="1000" cy="62" r="4" fill="#F6C14A"/>
+      <rect x="972" y="90" width="10" height="16" rx="4" fill="#F4A35A"/>
+      <rect x="1024" y="90" width="10" height="16" rx="4" fill="#F4A35A"/>
+    </svg>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  const grid = document.querySelector("#prompt-grid");
+  const count = document.querySelector("#prompt-count");
+  let topic = "all";
+  function apply() {
+    let visible = 0;
+    grid.querySelectorAll(".idea-card").forEach((card) => {
+      const show = topic === "all" || card.dataset.topic === topic;
+      card.hidden = !show;
+      if (show) visible += 1;
+    });
+    count.textContent = visible + (visible === 1 ? " prompt to kick-start your learning" : " prompts to kick-start your learning");
+  }
+  document.querySelectorAll("#prompt-chips .chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      topic = chip.dataset.topic;
+      document.querySelectorAll("#prompt-chips .chip").forEach((item) => item.classList.toggle("is-on", item === chip));
+      apply();
+    });
+  });
+</script>
+{% endblock %}

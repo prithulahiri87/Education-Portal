@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}TechLearn Academy{% endblock %}</title>
+    <link rel="icon" href="/assets/logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400&family=Geist:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/app.css" />
+    <link rel="stylesheet" href="/static/figma.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <aside class="sidebar">
+        <div class="brand-row">
+          <a class="brand" href="/">
+            <div class="logo academy-logo" aria-hidden="true">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="10" fill="#4F46E5"/><circle cx="16" cy="15" r="6" fill="#C7D2FE"/><circle cx="22" cy="10" r="2" fill="#FDBA74"/><path d="M8 23c2.2-2 4.8-3 8-3s5.8 1 8 3" stroke="#E0E7FF" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </div>
+            <p class="brand-name">TechLearn Academy:</p>
+          </a>
+          <button class="icon-btn" id="collapse" type="button" aria-label="Collapse sidebar">
+            <img class="icon" src="/assets/sidebar-open.svg" alt="" width="16" height="16" />
+          </button>
+        </div>
+        <a class="new-chat" href="/chat">
+          <img class="icon" src="/assets/message-square-plus.svg" alt="" width="16" height="16" />
+          New Chat
+        </a>
+        <a class="side-link" href="/" aria-pressed="{{ 'true' if active == 'home' else 'false' }}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.5 7.2 8 2.8l5.5 4.4V13a1 1 0 0 1-1 1H10V9.5H6V14H3.5a1 1 0 0 1-1-1V7.2Z" stroke="#475569" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Home
+          <svg class="nav-robot" viewBox="0 0 36 28" aria-hidden="true"><rect x="8" y="8" width="18" height="14" rx="5" fill="#7C9BFF"/><circle cx="14" cy="14" r="1.6" fill="#fff"/><circle cx="20" cy="14" r="1.6" fill="#fff"/><rect x="14" y="2" width="4" height="6" rx="2" fill="#B9C9FF"/><circle cx="16" cy="2" r="2" fill="#F6B24A"/></svg>
+        </a>
+        <a class="side-link" href="/prompts" aria-pressed="{{ 'true' if active == 'prompts' else 'false' }}">
+          <img class="icon" src="/assets/bookmark.svg" alt="" width="16" height="16" />
+          Browse Prompts
+          <svg class="nav-robot" viewBox="0 0 36 28" aria-hidden="true"><rect x="8" y="8" width="18" height="14" rx="5" fill="#7C9BFF"/><circle cx="14" cy="14" r="1.6" fill="#fff"/><circle cx="20" cy="14" r="1.6" fill="#fff"/><rect x="14" y="2" width="4" height="6" rx="2" fill="#B9C9FF"/><circle cx="16" cy="2" r="2" fill="#F6B24A"/></svg>
+        </a>
+        <a class="side-link" href="/plugins" aria-pressed="{{ 'true' if active == 'plugins' else 'false' }}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 2.5h4v3H6v-3ZM7 1.5a1 1 0 0 0-1 1V5.5h4V2.5a1 1 0 0 0-1-1H7ZM3.5 7.5h9a1 1 0 0 1 1 1v1.2a2.3 2.3 0 0 1-2.1 2.3H9.2V14a1.2 1.2 0 0 1-2.4 0v-2H4.6A2.3 2.3 0 0 1 2.5 9.7V8.5a1 1 0 0 1 1-1Z" fill="#475569"/></svg>
+          Plugins
+        </a>
+        <a class="side-link" href="/lab" aria-pressed="{{ 'true' if active == 'lab' else 'false' }}">
+          <img class="icon" src="/assets/ai-lab.svg" alt="" width="16" height="16" />
+          Lab
+        </a>
+        <a class="side-link" href="/modules" aria-pressed="{{ 'true' if active == 'modules' else 'false' }}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="#4F46E5"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="#F97316"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="#0EA5E9"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="#10B981"/></svg>
+          Course Modules
+          <svg class="nav-robot" viewBox="0 0 36 28" aria-hidden="true"><rect x="8" y="8" width="18" height="14" rx="5" fill="#7C9BFF"/><circle cx="14" cy="14" r="1.6" fill="#fff"/><circle cx="20" cy="14" r="1.6" fill="#fff"/><rect x="14" y="2" width="4" height="6" rx="2" fill="#B9C9FF"/><circle cx="16" cy="2" r="2" fill="#F6B24A"/></svg>
+        </a>
+        <a class="side-link" href="/progress" aria-pressed="{{ 'true' if active == 'progress' else 'false' }}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 13.5h12" stroke="#475569" stroke-width="1.4" stroke-linecap="round"/><path d="M3.5 13V9.5M8 13V5.5M12.5 13V3" stroke="#4F46E5" stroke-width="1.8" stroke-linecap="round"/></svg>
+          Progress
+        </a>
+        <a class="side-link" href="/certification" aria-pressed="{{ 'true' if active == 'certification' else 'false' }}">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="3" width="12" height="9" rx="1.5" stroke="#475569" stroke-width="1.4"/><path d="M6 12.2 8 14l2-1.8" stroke="#4F46E5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 6.5h6M5 8.5h4" stroke="#475569" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Certification
+        </a>
+        <label class="search">
+          <img class="icon" src="/assets/search.svg" alt="" width="16" height="16" />
+          <input id="search" type="search" placeholder="Search conversations..." autocomplete="off" />
+        </label>
+        <div class="chats">
+          <h2>Recent Chats</h2>
+          <div class="chat-list" id="chat-list">
+            <a class="chat-item" href="/chat"><img class="icon" src="/assets/message-circle.svg" alt="" width="18" height="18" /><span class="chat-meta"><span class="chat-top"><span class="chat-title">React custom debounce hook</span><span class="chat-time">Just now</span></span><span class="chat-preview">Can you show me how to write a custom React hook?</span></span></a>
+            <a class="chat-item" href="/chat"><img class="icon" src="/assets/message-circle.svg" alt="" width="18" height="18" /><span class="chat-meta"><span class="chat-top"><span class="chat-title">Tailwind bento grid layouts</span><span class="chat-time">2h ago</span></span><span class="chat-preview">Here are 3 distinct layouts for a bento grid.</span></span></a>
+            <a class="chat-item" href="/chat"><img class="icon" src="/assets/message-circle.svg" alt="" width="18" height="18" /><span class="chat-meta"><span class="chat-top"><span class="chat-title">A/B testing strategies SaaS</span><span class="chat-time">Yesterday</span></span><span class="chat-preview">To run clean conversion tests you need a stable audience split.</span></span></a>
+            <a class="chat-item" href="/chat"><img class="icon" src="/assets/message-circle.svg" alt="" width="18" height="18" /><span class="chat-meta"><span class="chat-top"><span class="chat-title">Marketing campaign copy</span><span class="chat-time">3 days ago</span></span><span class="chat-preview">Sure! Here are some catchy headlines for the campaign.</span></span></a>
+          </div>
+        </div>
+        <div class="profile">
+          <div class="avatar academy-avatar" aria-hidden="true"><span>SJ</span></div>
+          <div class="who">
+            <strong>Sarah Jenkins</strong>
+            <span>sarah@creativeops.io</span>
+          </div>
+          <button type="button" aria-label="Settings">
+            <img class="icon" src="/assets/settings.svg" alt="" width="18" height="18" />
+          </button>
+        </div>
+      </aside>
+      <section class="main">
+        {% block main %}{% endblock %}
+      </section>
+    </div>
+    <script>
+      document.querySelector("#collapse").addEventListener("click", () => {
+        document.querySelector("#app").classList.add("sidebar-collapsed");
+      });
+      const reopen = document.querySelector("#reopen");
+      if (reopen) {
+        reopen.addEventListener("click", () => {
+          document.querySelector("#app").classList.remove("sidebar-collapsed");
+        });
+      }
+      document.querySelector("#search").addEventListener("input", (event) => {
+        const query = event.target.value.trim().toLowerCase();
+        document.querySelectorAll(".chat-item").forEach((item) => {
+          item.hidden = Boolean(query) && !item.textContent.toLowerCase().includes(query);
+        });
+      });
+    </script>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>
